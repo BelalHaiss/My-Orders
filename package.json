@@ -4,12 +4,18 @@
   "description": "sandwich-orders",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "node": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "clientI": "npm install - prefix client",
+    "dev": "concurrently \"npm run node\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "babel-plugin-macros": "^3.1.0",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.6",
     "express": "^4.17.1",
