@@ -11,7 +11,7 @@ function App() {
       <Router>
         <Fragment>
           <Navbar />
-          <div className='container mt-3'>
+          <div className=' mt-3'>
             <Switch>
               <Route exact path='/' component={Home} />
               <Route exact path='/about' component={About} />

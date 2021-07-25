@@ -1,51 +1,42 @@
-import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { useState } from 'react';
+function ModalExample({ details }) {
+  const [show, setShow] = useState(false);
 
-const Modal = ({ details }) => {
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
-    <div className='mt-2'>
-      <button
-        type='button'
-        className='btn btn-dark'
-        data-bs-toggle='modal'
-        data-bs-target='#staticBackdrop'
-      >
+    <>
+      <Button variant='dark' className='mt-2' onClick={handleShow}>
         More Details
-      </button>
-      <div
-        className='modal fade'
-        id='staticBackdrop'
-        data-bs-keyboard='false'
-        aria-labelledby='staticBackdropLabel'
-        aria-hidden='true'
-      >
-        <div className='modal-dialog modal-dialog-centered'>
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h5 className='modal-title text-dark' id='staticBackdropLabel'>
-                Order Details
-              </h5>
-              <button
-                type='button'
-                className='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-              ></button>
-            </div>
-            <div className='modal-body alert alert-warning'>{details}</div>
-            <div className='modal-footer'>
-              <button
-                type='button'
-                className='btn btn-secondary'
-                data-bs-dismiss='modal'
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+      </Button>
 
-export default Modal;
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            {' '}
+            <span className='fs-4'> comments:</span> {details.comments}
+          </p>
+          <p>
+            {' '}
+            <span className='fs-4'> Name:</span> {details.name}
+          </p>
+          <p>
+            {' '}
+            <span className='fs-4'> phone:</span> {details.phone}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+export default ModalExample;

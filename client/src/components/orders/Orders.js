@@ -7,12 +7,10 @@ const Orders = () => {
   const { orders } = Context;
 
   return (
-    <div className=' row'>
-      <div className='col-7 col-sm-5 ms-auto'>
-        {orders.map((order) => (
-          <OrderItem key={order.id} order={order} />
-        ))}
-      </div>
+    <div>
+      {orders.map((order) => (
+        <OrderItem key={order.id} order={order} />
+      ))}
     </div>
   );
 };
