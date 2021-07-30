@@ -17,7 +17,7 @@ module.exports.registerBodySchema = (req, res, next) => {
   const { error } = registerBodySchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(',');
-
+    console.log(error);
     return res.status(400).send(msg);
   }
   next();
@@ -40,7 +40,7 @@ module.exports.loginSchema = (req, res, next) => {
   if (error) {
     const msg = error.details.map((el) => el.message).join(',');
 
-    return res.status(400).send(msg);
+    return res.status(400).json({ msg });
   }
   next();
 };

@@ -13,12 +13,12 @@ const { isAuth } = require('../middlewares/auth');
 
 router.get('/', isAuth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    console.log(user);
+    const user = await User.findById(req.user._id);
+    console.log('get route');
     res.json(user);
   } catch (e) {
     console.log(err.message);
-    res.status(500).send('server error');
+    res.status(500).json({ msg: 'server error' });
   }
 });
 // @Route post api/auth
@@ -26,39 +26,32 @@ router.get('/', isAuth, async (req, res) => {
 // @access  public
 
 router.post('/', loginSchema, async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
+  console.log('post route');
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).select('+password');
+    console.log(user);
     if (!user) {
       return res.status(400).json({ msg: 'invalid credintals' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).send('password is wrong');
+      return res.status(400).json({ msg: 'password is wrong' });
     }
 
-    const payload = {
-      user: {
-        id: user.id
-      }
-    };
-    jwt.sign(
-      payload,
-      config.get('jwtSecret'),
-      {
-        expiresIn: 3600
-      },
-      (err, token) => {
-        if (err) throw err;
-
-        res.json({ token });
-      }
-    );
+    req.session.user = user;
+    res.redirect('/api/auth');
   } catch (e) {
     console.log(e);
     res.status(500).send('Server Error');
   }
+});
+router.post('/logout', isAuth, (req, res) => {
+  console.log(req.session);
+  req.session.user = null;
+  console.log(req.session);
+  res.end();
 });
 
 module.exports = router;

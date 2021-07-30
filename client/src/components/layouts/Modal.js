@@ -1,6 +1,6 @@
 import { Button, Modal } from 'react-bootstrap';
 import { useState } from 'react';
-function ModalExample({ details }) {
+function ModalExample({ details: { comments, address, name, phone } }) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -19,15 +19,19 @@ function ModalExample({ details }) {
         <Modal.Body>
           <p>
             {' '}
-            <span className='fs-4'> comments:</span> {details.comments}
+            <span className='fs-5'> comments:</span> {comments}
           </p>
           <p>
             {' '}
-            <span className='fs-4'> Name:</span> {details.name}
+            <span className='fs-5'> Name:</span> {name}
           </p>
           <p>
             {' '}
-            <span className='fs-4'> phone:</span> {details.phone}
+            <span className='fs-5'> phone:</span> {phone}
+          </p>
+          <p>
+            {' '}
+            <span className='fs-5'> address:</span> {address}
           </p>
         </Modal.Body>
         <Modal.Footer>

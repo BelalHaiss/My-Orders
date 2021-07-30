@@ -3,11 +3,8 @@ import { Form } from 'react-bootstrap';
 
 const ItemSelect = ({ type, onChange, item }) => {
   return (
-    <Form.Select required onChange={onChange} name='item'>
-      <option selected={item === ''} value=''>
-        {' '}
-        select from menu
-      </option>
+    <Form.Select value={item} required onChange={onChange} name='item'>
+      <option value=''> select from menu</option>
       <option value={type === 'pizza' ? 'Margherita' : 'Burger'}>
         {type === 'pizza' ? 'Margherita' : 'Burger'}
       </option>

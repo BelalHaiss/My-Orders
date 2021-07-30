@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import orderContext from '../context/createContext';
 
@@ -7,18 +7,29 @@ import ItemSelect from './ItemSelect';
 const AddOrderForm = () => {
   // eslint-disable-next-line
   const [validated, setValidated] = useState(false);
-
-  const myOrderContext = useContext(orderContext);
-  const [order, setOrder] = useState({
+  const defaultOrder = {
     name: '',
     phone: '',
     address: '',
     qty: '',
-    details: '',
+    comments: '',
     type: 'pizza',
     item: ''
-  });
-  const { name, phone, address, item, type, qty, details } = order;
+  };
+
+  const [order, setOrder] = useState(defaultOrder);
+  const { name, phone, address, item, type, qty, comments } = order;
+  const [theCase, setCase] = useState('Add');
+  const myOrderContext = useContext(orderContext);
+  useEffect(() => {
+    if (myOrderContext.current) {
+      setOrder(myOrderContext.current);
+      setCase('Edit');
+    } else {
+      setOrder(defaultOrder);
+      setCase('Add');
+    }
+  }, [myOrderContext]);
   const onChange = (e) =>
     setOrder((state) => {
       if (e.target.name === 'type') {
@@ -33,16 +44,13 @@ const AddOrderForm = () => {
       e.preventDefault();
     } else {
       e.preventDefault();
-      myOrderContext.addOrder(order);
-      setOrder({
-        name: '',
-        phone: '',
-        address: '',
-        qty: '',
-        type: 'pizza',
-        details: '',
-        item: ''
-      });
+      if (myOrderContext.current) {
+        myOrderContext.updateOrder(order);
+      } else {
+        myOrderContext.addOrder(order);
+      }
+
+      myOrderContext.clearCurrent();
       return setValidated(false);
     }
 
@@ -56,7 +64,7 @@ const AddOrderForm = () => {
         onSubmit={onSubmit}
         className='p-4 border border-dark'
       >
-        <h3>Add A new order</h3>
+        <h3>{theCase === 'Add' ? 'Add A new order' : 'Edit The Order'} </h3>
         <Form.Group className='mt-3'>
           <Form.Control
             placeholder='Name'
@@ -83,7 +91,6 @@ const AddOrderForm = () => {
             required
             name='address'
             type='text'
-            value={address}
             onChange={onChange}
           />
         </Form.Group>
@@ -143,17 +150,28 @@ const AddOrderForm = () => {
           </Form.Select>
         </Form.Group>
         <Form.Group>
-          <Form.Label className='fs-4'> Order Details</Form.Label>
+          <Form.Label className='fs-4'> Order comments</Form.Label>
           <Form.Control
             as='textarea'
             onChange={onChange}
             required
             name='comments'
-            value={details.comments}
+            value={comments}
             placeholder='Leave a comment here'
           />
         </Form.Group>
-        <button className='btn btn-success w-100 mt-3 mb-1 '>Add Order</button>
+        <button className='btn btn-success w-100 mt-3 mb-1 '>
+          {theCase === 'Add' ? 'Add A new order' : 'Edit The Order'}
+        </button>
+        {myOrderContext.current && (
+          <button
+            className='btn btn-primary w-100'
+            onClick={() => myOrderContext.clearCurrent()}
+          >
+            {' '}
+            Clear{' '}
+          </button>
+        )}
       </Form>
     </>
   );

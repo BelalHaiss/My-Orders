@@ -1,25 +1,45 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import authContext from '../context/Auth/authContext';
+
 const Navbar = () => {
+  const theAuthContext = useContext(authContext);
   return (
     <nav className='p-1 navbar navbar-expand-lg navbar-light bg-dark'>
       <span className=' ms-5 navbar-brand text-success'>
         <i className='bi bi-shop fs-1   '></i> Orders Maker
       </span>
-      <div className='ms-auto'>
-        <Link
-          className='nav-link  text-dark btn btn-success  d-inline-block'
-          to='/'
-        >
-          Home
-        </Link>
-        <Link
-          className='nav-link  mx-3 text-dark btn btn-success d-inline-block'
-          to='/About'
-        >
-          About
-        </Link>
-      </div>
+
+      {theAuthContext.isAuth ? (
+        <div className='ms-auto p-2'>
+          <li className='nav-link ms-2   fs-5 badge     d-inline-block'>
+            Hello {theAuthContext.user && theAuthContext.user.username}
+          </li>
+          <Link
+            onClick={theAuthContext.logout}
+            className='nav-link ms-2   text-dark btn btn-success d-inline-block'
+            to='#'
+          >
+            Logout
+          </Link>
+        </div>
+      ) : (
+        <div className='ms-auto p-2'>
+          {' '}
+          <Link
+            className='nav-link ms-2   text-dark btn btn-success d-inline-block'
+            to='/Login'
+          >
+            Login
+          </Link>
+          <Link
+            className='nav-link ms-2   text-dark btn btn-success d-inline-block'
+            to='/Register'
+          >
+            Register
+          </Link>{' '}
+        </div>
+      )}
     </nav>
   );
 };

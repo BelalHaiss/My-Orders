@@ -10,90 +10,92 @@ const OrderState = (props) => {
       {
         id: 1,
         type: 'sandwich',
-        item: 'burger',
-        details: {
-          name: 'belal',
-          phone: '01032758989',
-          comments: 'no vegs'
-        },
+        item: 'flafel',
+        name: 'belal',
+        phone: '01032758989',
         address: '6st-el ramd',
+        comments: 'no vegs',
         qty: 5
       },
       {
         id: 2,
         type: 'pizza',
         item: 'hot dog',
-        details: {
-          name: 'belal',
-          phone: '01032758989',
-          comments: 'no vegs'
-        },
+        name: 'belal',
+        phone: '01032758989',
         address: '6st-el ramd',
+        comments: 'no vegs',
         qty: 3
       },
       {
         id: 3,
         type: 'pizza',
         item: 'hot dog',
-        details: {
-          name: 'belal',
-          phone: '01032758989',
-          comments: 'no vegs'
-        },
+        name: 'belal',
+        phone: '01032758989',
         address: '6st-el ramd',
+        comments: 'no vegs',
         qty: 1
       },
       {
         id: 4,
         type: 'sandwich',
         item: 'French fries',
-        details: {
-          name: 'belal',
-          phone: '01032758989',
-          comments: 'no vegs'
-        },
+        name: 'belal',
+        phone: '01032758989',
         address: '6st-el ramd',
-        qty: 6
+        comments: 'no vegs',
+        qty: 9
       }
-    ]
+    ],
+    current: null,
+    filtered: null
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   // add order
   const addOrder = (order) => {
-    let theOrder = {};
+    order.id = uuidv4();
 
-    theOrder = {
-      address: order.address,
-      id: uuidv4(),
-      type: order.type,
-      item: order.item,
-      qty: order.qty,
-      details: {
-        name: order.name,
-        phone: order.phone,
-        comments: order.comments
-      }
-    };
-
-    dispatch({ type: types.addOrder, payload: theOrder });
+    dispatch({ type: types.addOrder, payload: order });
+  };
+  // setCurrent
+  const setCurrent = (order) => {
+    dispatch({ type: types.setCurrent, payload: order });
   };
 
+  // clearCurrent
+  const clearCurrent = (order) => {
+    dispatch({ type: types.clearCurrent });
+  };
   // edit order
-
+  const updateOrder = (order) => {
+    dispatch({ type: types.updateOrder, payload: order });
+  };
   // delete order
   const deleteOrder = (id) => {
     dispatch({ type: types.deleteOrder, payload: id });
   };
   // filter orders
-
+  const setFilter = (text) => {
+    dispatch({ type: types.setFilter, payload: text });
+  };
   // clear filter
-
+  const clearFilter = (text) => {
+    dispatch({ type: types.clearFilter });
+  };
   return (
     <orderContext.Provider
       value={{
         orders: state.orders,
         addOrder,
-        deleteOrder
+        deleteOrder,
+        current: state.current,
+        filtered: state.filtered,
+        setFilter,
+        clearFilter,
+        setCurrent,
+        clearCurrent,
+        updateOrder
       }}
     >
       {props.children}
