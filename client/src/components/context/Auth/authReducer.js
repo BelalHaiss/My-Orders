@@ -19,7 +19,7 @@ const reducer = (state, action) => {
     case types.registerFail:
       return { ...initialState, error: action.payLoad, loading: false };
     case types.loginFail:
-      return { ...initialState, loading: false };
+      return { ...initialState, error: action.payLoad, loading: false };
 
     case types.logout:
       return { ...initialState, loading: false };

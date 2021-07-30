@@ -6,10 +6,10 @@ import { PizzaImg, SandwichImg } from '../Styles/icons/icons';
 
 const OrderItem = ({ order }) => {
   // eslint-disable-next-line
-  const { type, item, name, phone, qty, comments, address, id } = order;
+  const { type, item, name, phone, qty, comments, address, _id } = order;
   const theOrderContext = useContext(orderContext);
   const deleteOrder = () => {
-    theOrderContext.deleteOrder(id);
+    theOrderContext.deleteOrder(_id);
     theOrderContext.clearCurrent();
     if (theOrderContext.filtered) {
       theOrderContext.clearFilter();
@@ -38,7 +38,7 @@ const OrderItem = ({ order }) => {
                 {
                   <ModalExample
                     details={{ comments, address, name, phone }}
-                    id={id}
+                    _id={_id}
                   />
                 }
               </span>

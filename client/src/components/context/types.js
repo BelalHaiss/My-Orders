@@ -1,7 +1,12 @@
 export const addOrder = 'addOrder';
+export const getOrders = 'getOrders';
 export const updateOrder = 'updateOrder';
 export const deleteOrder = 'deleteOrder';
 export const setFilter = 'filterOrders';
 export const clearFilter = 'clearFilter';
 export const setCurrent = 'setCurrent';
 export const clearCurrent = 'clearCurrent';
+export const orderError = 'orderError';
+export const clearError = 'clearError';
+export const setLoading = 'setLoading';
+export const clearOrders = 'clearOrders';

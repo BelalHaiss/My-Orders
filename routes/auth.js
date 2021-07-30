@@ -13,11 +13,10 @@ const { isAuth } = require('../middlewares/auth');
 
 router.get('/', isAuth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
-    console.log('get route');
+    const user = await User.findById(req.user._id).select('-_id');
+
     res.json(user);
   } catch (e) {
-    console.log(err.message);
     res.status(500).json({ msg: 'server error' });
   }
 });
@@ -27,10 +26,9 @@ router.get('/', isAuth, async (req, res) => {
 
 router.post('/', loginSchema, async (req, res) => {
   const { email, password } = req.body;
-  console.log('post route');
   try {
     let user = await User.findOne({ email }).select('+password');
-    console.log(user);
+
     if (!user) {
       return res.status(400).json({ msg: 'invalid credintals' });
     }
@@ -43,14 +41,12 @@ router.post('/', loginSchema, async (req, res) => {
     req.session.user = user;
     res.redirect('/api/auth');
   } catch (e) {
-    console.log(e);
     res.status(500).send('Server Error');
   }
 });
 router.post('/logout', isAuth, (req, res) => {
-  console.log(req.session);
   req.session.user = null;
-  console.log(req.session);
+
   res.end();
 });
 

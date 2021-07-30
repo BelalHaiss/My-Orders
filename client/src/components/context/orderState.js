@@ -1,62 +1,60 @@
 import React, { useReducer } from 'react';
 import reducer from './orderRuducer';
+import axios from 'axios';
 import * as types from './types';
 import orderContext from './createContext';
-import { v4 as uuidv4 } from 'uuid';
 
 const OrderState = (props) => {
   const initialState = {
-    orders: [
-      {
-        id: 1,
-        type: 'sandwich',
-        item: 'flafel',
-        name: 'belal',
-        phone: '01032758989',
-        address: '6st-el ramd',
-        comments: 'no vegs',
-        qty: 5
-      },
-      {
-        id: 2,
-        type: 'pizza',
-        item: 'hot dog',
-        name: 'belal',
-        phone: '01032758989',
-        address: '6st-el ramd',
-        comments: 'no vegs',
-        qty: 3
-      },
-      {
-        id: 3,
-        type: 'pizza',
-        item: 'hot dog',
-        name: 'belal',
-        phone: '01032758989',
-        address: '6st-el ramd',
-        comments: 'no vegs',
-        qty: 1
-      },
-      {
-        id: 4,
-        type: 'sandwich',
-        item: 'French fries',
-        name: 'belal',
-        phone: '01032758989',
-        address: '6st-el ramd',
-        comments: 'no vegs',
-        qty: 9
-      }
-    ],
+    orders: [],
     current: null,
-    filtered: null
+    loading: true,
+    filtered: null,
+    orderError: null
   };
   const [state, dispatch] = useReducer(reducer, initialState);
+  // setLoading to false
+  const setLoading = () => {
+    dispatch({ type: types.setLoading });
+  };
   // add order
-  const addOrder = (order) => {
-    order.id = uuidv4();
+  const addOrder = async (order) => {
+    try {
+      const res = await axios.post('/api/orders', order);
+      dispatch({ type: types.addOrder, payload: res.data });
 
-    dispatch({ type: types.addOrder, payload: order });
+      setLoading();
+    } catch (e) {
+      const err = await e.response.data.msg;
+
+      dispatch({ type: types.orderError, payload: err });
+      setTimeout(() => dispatch({ type: types.clearError }), 500);
+      setLoading();
+    }
+  };
+  // get orders
+  const getOrders = async () => {
+    try {
+      const res = await axios.get('/api/orders', { withCredentials: true });
+      dispatch({ type: types.getOrders, payload: res.data });
+      setLoading();
+    } catch (e) {
+      const err = await e.response.data.msg;
+      setLoading();
+      dispatch({ type: types.orderError, payload: err });
+      setTimeout(() => dispatch({ type: types.clearError }), 500);
+    }
+  };
+  const updateOrder = async (order) => {
+    try {
+      const res = await axios.put(`/api/orders/${order._id}`, order);
+      dispatch({ type: types.updateOrder, payload: res.data });
+    } catch (e) {
+      const err = await e.response.data.msg;
+      setLoading();
+      dispatch({ type: types.orderError, payload: err });
+      setTimeout(() => dispatch({ type: types.clearError }), 500);
+    }
   };
   // setCurrent
   const setCurrent = (order) => {
@@ -68,12 +66,17 @@ const OrderState = (props) => {
     dispatch({ type: types.clearCurrent });
   };
   // edit order
-  const updateOrder = (order) => {
-    dispatch({ type: types.updateOrder, payload: order });
-  };
   // delete order
-  const deleteOrder = (id) => {
-    dispatch({ type: types.deleteOrder, payload: id });
+  const deleteOrder = async (id) => {
+    try {
+      await axios.delete(`/api/orders/${id}`);
+      dispatch({ type: types.deleteOrder, payload: id });
+    } catch (e) {
+      const err = await e.response.data.msg;
+      setLoading();
+      dispatch({ type: types.orderError, payload: err });
+      setTimeout(() => dispatch({ type: types.clearError }), 500);
+    }
   };
   // filter orders
   const setFilter = (text) => {
@@ -83,6 +86,9 @@ const OrderState = (props) => {
   const clearFilter = (text) => {
     dispatch({ type: types.clearFilter });
   };
+  const clearOrders = () => {
+    dispatch({ type: types.clearOrders });
+  };
   return (
     <orderContext.Provider
       value={{
@@ -91,11 +97,15 @@ const OrderState = (props) => {
         deleteOrder,
         current: state.current,
         filtered: state.filtered,
+        clearOrders,
         setFilter,
         clearFilter,
         setCurrent,
+        loading: state.loading,
         clearCurrent,
-        updateOrder
+        orderError: state.orderError,
+        updateOrder,
+        getOrders
       }}
     >
       {props.children}

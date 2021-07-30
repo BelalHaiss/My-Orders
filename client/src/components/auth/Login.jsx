@@ -13,7 +13,6 @@ const Login = (props) => {
 
   const myAlertContext = useContext(alertContext);
   useEffect(() => {
-    console.log(props.history);
     if (theAuthContext.isAuth) {
       props.history.push('/');
     }
@@ -22,7 +21,6 @@ const Login = (props) => {
       theAuthContext.error !== 'no user' &&
       theAuthContext.error
     ) {
-      console.log(theAuthContext.error);
       myAlertContext.setAlert(theAuthContext.error, 'danger');
       theAuthContext.clearError();
     }

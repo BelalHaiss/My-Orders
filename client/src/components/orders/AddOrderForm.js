@@ -30,6 +30,7 @@ const AddOrderForm = () => {
       setCase('Add');
     }
   }, [myOrderContext]);
+
   const onChange = (e) =>
     setOrder((state) => {
       if (e.target.name === 'type') {
@@ -68,8 +69,8 @@ const AddOrderForm = () => {
         <Form.Group className='mt-3'>
           <Form.Control
             placeholder='Name'
-            value={name}
             name='name'
+            value={name}
             type='text'
             required
             onChange={onChange}

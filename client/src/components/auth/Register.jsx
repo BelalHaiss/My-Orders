@@ -19,7 +19,6 @@ const Register = (props) => {
       props.history.push('/');
     }
     if (theAuthContext.error !== null && theAuthContext.error) {
-      console.log(theAuthContext.error);
       myAlertContext.setAlert(theAuthContext.error, 'danger');
       theAuthContext.clearError();
     } // eslint-disable-next-line

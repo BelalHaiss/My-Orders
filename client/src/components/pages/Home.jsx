@@ -7,10 +7,11 @@ const Home = () => {
   return (
     <Container fluid={'md'}>
       <Row>
-        <Col xs={'12'} sm={'7'} className='ms-auto'>
+        <Col xs={'12'} md={'7'} className='ms-auto'>
           <AddOrderForm />
         </Col>
-        <Col xs={'12'} sm={'5'} className='ms-auto'>
+
+        <Col xs={'12'} md={'5'} className='ms-auto orders__Component'>
           <Orders />
         </Col>
       </Row>
