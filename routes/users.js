@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
 const bcrypt = require('bcryptjs');
-const config = require('config');
+
 const { registerBodySchema } = require('../middlewares/joi.js');
 // @Route post api/users
 // @desc    register page
